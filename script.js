@@ -6,7 +6,7 @@ const clearButton = document.querySelector('[data-clear]');
 const display = document.querySelector('[data-display]');
 const display2= document.querySelector('[data-display2]')
 
-let currentNumber = '';
+let currentNumber = "";
 let operator = '';
 let previusNumber='';
 
@@ -16,7 +16,15 @@ multiply=(num1,num2)=> num1*num2;
 divide=(num1,num2)=>num1/num2;
 
 numbersButtons.forEach(button => button.addEventListener('click',(e)=>displayNumber(e.target.textContent)))
-operationsButtons.forEach(button => button.addEventListener('click',(e)=>displayOperator(e.target.textContent)))
+operationsButtons.forEach(button => button.addEventListener('click',(e)=>{
+    if(display.textContent=== "0" && previusNumber === "" ){
+        previusNumber = "0";
+        operator = e.target.textContent;
+        display2.textContent=previusNumber+operator;
+        return
+    }
+    displayOperator(e.target.textContent)
+}))
 clearButton.addEventListener('click',clear)
 equalButton.addEventListener('click',()=>{
     if(currentNumber != '' && previusNumber != ""){
@@ -27,11 +35,13 @@ equalButton.addEventListener('click',()=>{
 
 
 function displayNumber(num){
+    if(num === "." && display.textContent.includes(".")) return;
     currentNumber += num;
     display.textContent = currentNumber;
 }
 
 function displayOperator(op){
+    if(operator !== "" && currentNumber === "") return;
     if(currentNumber !== "" && previusNumber !== "" ){
         calculate();
         previusNumber = currentNumber;
@@ -39,6 +49,7 @@ function displayOperator(op){
         display2.textContent=previusNumber+operator
         display.textContent="";
     }
+    
     operator =  op;
     previusNumber = currentNumber;
     display2.textContent = previusNumber + operator;
@@ -80,6 +91,6 @@ function clear(){
     currentNumber ="";
     previusNumber='';
     operator='';
-    display.textContent = '';
+    display.textContent = '0';
     display2.textContent = '';
 }
